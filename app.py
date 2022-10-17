@@ -16,10 +16,39 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+# Configure to use sqlite database
+db = SQL("sqlite:///save.db")
+
+@app.after_request
+def after_request(response):
+    """Ensure responses aren't cached"""
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Expires"] = 0
+    response.headers["Pragma"] = "no-cache"
+    return response
+
 @app.route("/")
 def index():
+    return render_template("index.html")
+
+@app.route("/login", methods=["GET","POST"])
+def login():
     return render_template("index.html") 
 
-@app.route("/register")
+@app.route("/register", methods=["GET","POST"])
 def register():
+    # registering user
+    name = request.form.get("username")
+    password = request.form.get("password")
+    confirmation = request.form.get("confirmation")
+    userName = db.execute("SELECT username FROM users WHERE username = ?", name)
+    if request.method == "POST":
+        if not name:
+            return render_template("index.html")
+        if not password:
+            return render_template("index.html")
+        if len(userName) > 0:
+            return render_template("index.html")
+        db.execute("INSERT INTO users (username, hash) VALUES(?,?)", name, generate_password_hash(password))
+        return login()
     return render_template("register.html")
