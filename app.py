@@ -46,15 +46,19 @@ def register():
     password = request.form.get("password")
     confirmation = request.form.get("confirmation")
     userName = db.execute("SELECT username FROM users WHERE username = ?", name)
+
+    errorName = "Please enter an user name"
+    errorPassword = "Please enter a valid password"
+    errorExists = "User name entered already exists"
     if request.method == "POST":
         if not name:
-            return render_template("errorregister.html")
+            return render_template("register.html", errorName = errorName)
         if not password:
-            return render_template("errorregister.html", name = name)
+            return render_template("errorregister.html", errorPassword = errorPassword)
         if len(userName) > 0:
-            return render_template("errorregister.html")
+            return render_template("errorregister.html" errorExists = errorExists)
         if not password == confirmation:
-            return render_template("errorregister.html", name = name)
+            return render_template("errorregister.html", errorPassword = errorPassword)
         db.execute("INSERT INTO users (username, hash) VALUES(?,?)", name, generate_password_hash(password))
         return login()
     return render_template("register.html")
