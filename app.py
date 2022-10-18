@@ -33,6 +33,10 @@ def index():
 
 @app.route("/login", methods=["GET","POST"])
 def login():
+    session.clear()
+    #if request.method == "POST":
+
+
     return render_template("index.html") 
 
 @app.route("/register", methods=["GET","POST"])
@@ -44,11 +48,13 @@ def register():
     userName = db.execute("SELECT username FROM users WHERE username = ?", name)
     if request.method == "POST":
         if not name:
-            return render_template("index.html")
+            return render_template("errorregister.html")
         if not password:
-            return render_template("index.html")
+            return render_template("errorregister.html", name = name)
         if len(userName) > 0:
-            return render_template("index.html")
+            return render_template("errorregister.html")
+        if not password == confirmation:
+            return render_template("errorregister.html", name = name)
         db.execute("INSERT INTO users (username, hash) VALUES(?,?)", name, generate_password_hash(password))
         return login()
     return render_template("register.html")
