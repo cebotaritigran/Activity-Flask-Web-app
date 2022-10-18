@@ -7,7 +7,7 @@
 {% block main %}
     <form action="/register" method="post">
         <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text" value="{{ name }}">
         </div>
         <div>{{ errorName }} {{ errorExists }}</div>
         <div class="mb-3">
@@ -17,7 +17,7 @@
         <div class="mb-3">
             <input class="form-control mx-auto w-auto" id="password" name="confirmation" placeholder="Confirmation" type="password">
         </div>
-        <div>{{ errorPassword }}</div>
+        <div>{{ errorPasswordC }}</div>
         <button class="btn btn-primary" type="submit">Register</button>
     </form>
 {% endblock %}
