@@ -34,10 +34,25 @@ def index():
 @app.route("/login", methods=["GET","POST"])
 def login():
     session.clear()
-    #if request.method == "POST":
+    if request.method == "POST":
+        errorName = "Please enter an user name"
+        errorPassword = "Please enter a valid password"
+        errorWrong = "invalid username and/or password"
+        if not request.form.get("username"):
+            return render_template("login.html", errorName = errorName)
+        elif not request.form.get("password"):
+            return render_template("login.html", errorPassword = errorPassword)
+    
+        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
 
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+            return render_template("login.html", errorWrong = errorWrong)
+    
+        session["user_id"] = rows[0]["id"]
 
-    return render_template("index.html") 
+        return render_template("home.html")
+    else:
+        return render_template("login.html")
 
 @app.route("/register", methods=["GET","POST"])
 def register():
