@@ -5,5 +5,8 @@
 {% endblock %}
 
 {% block main %}
-you are logged in
+<form method="post">
+    {{ ckeditor.create() }}
+    <input type="submit">
+</form>
 {% endblock %}

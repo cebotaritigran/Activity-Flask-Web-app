@@ -4,9 +4,11 @@ from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
+from flask_ckeditor import CKEditor
 
 # configuring application
 app = Flask(__name__)
+ckeditor = CKEditor(app)
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -33,6 +35,7 @@ def index():
 
 @app.route("/login", methods=["GET","POST"])
 def login():
+    #logging user
     session.clear()
     if request.method == "POST":
         errorName = "Please enter an user name"
