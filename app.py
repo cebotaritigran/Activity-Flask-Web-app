@@ -5,9 +5,12 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_ckeditor import CKEditor
+from wtforms import StringField, SubmitField
+
 
 # configuring application
 app = Flask(__name__)
+app.config['CKEDITOR_PKG_TYPE'] = 'basic'
 ckeditor = CKEditor(app)
 
 # Ensure templates are auto-reloaded
@@ -81,3 +84,11 @@ def register():
         db.execute("INSERT INTO users (username, hash) VALUES(?,?)", name, generate_password_hash(password))
         return login()
     return render_template("register.html")
+
+@app.route ("/textsave", methods=["GET","POST"])
+def textsave():
+    user_id = session["user_id"]
+    text = request.form.get("ckeditor")
+    currentTime = db.execute("SELECT CURRENT_TIMESTAMP")[0]["CURRENT_TIMESTAMP"]
+    db.execute("INSERT INTO users_text (text_id, text, d1) VALUES(?,?,?)",user_id, text, currentTime)
+    return render_template("home.html")
