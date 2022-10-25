@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Diary
+{% endblock %}
+
+{% block main %}
+{% for text in text %}
+<tr>
+    <th>{{ text.text }} </th>
+</tr> 
+{% endfor %}
+{% endblock %}
