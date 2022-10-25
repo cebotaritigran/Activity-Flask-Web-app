@@ -9,9 +9,17 @@
     {{ ckeditor.create() }}
     <button class="btn btn-primary" type="submit">Save</button>
 </form>
-{% for text in text %}
-<tr>
-    <th>{{ text.text }} </th>
-</tr> 
-{% endfor %}
+<tbody>
+    {% for text in text %}
+        <tr>
+            <td>{{ text.text | safe }}</td>
+            <td>
+                <form action="/deletepost" method="POST">
+                    <input name="id" type="hidden" value="{{ text.history_id }}">
+                    <input type="submit" value="Delete">
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>
 {% endblock %}

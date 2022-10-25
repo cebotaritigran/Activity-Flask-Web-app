@@ -7,6 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flask_ckeditor import CKEditor
 from wtforms import StringField, SubmitField
 
+from login import login_required
 
 # configuring application
 app = Flask(__name__)
@@ -60,6 +61,12 @@ def login():
     else:
         return render_template("login.html")
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/")
+
+
 @app.route("/register", methods=["GET","POST"])
 def register():
     # registering user
@@ -86,6 +93,7 @@ def register():
     return render_template("register.html")
 
 @app.route ("/home", methods=["GET","POST"])
+@login_required
 def home():
     user_id = session["user_id"]
     text = request.form.get("ckeditor")
@@ -95,5 +103,13 @@ def home():
         text = db.execute("SELECT * FROM users_text WHERE text_id = ?", user_id)
         return render_template("home.html",text = text)
     if request.method == "GET":
-        text = db.execute("SELECT * FROM users_text WHERE text_id = ?", user_id)
-        return render_template("home.html",text = text)
+        texts = db.execute("SELECT * FROM users_text WHERE text_id = ?", user_id)
+        return render_template("home.html",text = texts)
+
+@app.route ("/deletepost", methods=["POST"])
+@login_required
+def deletepost():
+    historyid = request.form.get("id")
+    if id:
+        db.execute("DELETE FROM users_text WHERE history_id = ?", historyid)
+    return redirect("/home")
