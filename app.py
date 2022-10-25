@@ -85,18 +85,15 @@ def register():
         return login()
     return render_template("register.html")
 
-@app.route ("/textsave", methods=["GET","POST"])
-def textsave():
+@app.route ("/home", methods=["GET","POST"])
+def home():
     user_id = session["user_id"]
     text = request.form.get("ckeditor")
     if request.method == "POST":
         currentTime = db.execute("SELECT CURRENT_TIMESTAMP")[0]["CURRENT_TIMESTAMP"]
         db.execute("INSERT INTO users_text (text_id, text, d1) VALUES(?,?,?)",user_id, text, currentTime)
-        return render_template("diary.html")
-    render_template("home.html")
-
-@app.route ("/diary", methods=["GET","POST"])
-    def diary():
-        user_id = session["user_id"]
-        text = db.execute("SELECT text FROM users_text WHERE text_id = ?", user_id)
-        return render_template("diary.html", text = text)
+        text = db.execute("SELECT * FROM users_text WHERE text_id = ?", user_id)
+        return render_template("home.html",text = text)
+    if request.method == "GET":
+        text = db.execute("SELECT * FROM users_text WHERE text_id = ?", user_id)
+        return render_template("home.html",text = text)
