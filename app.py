@@ -39,10 +39,10 @@ def index():
 
 @app.route("/login", methods=["GET","POST"])
 def login():
-    #logging user
+    # log in user if all the error checks went ok
     session.clear()
     if request.method == "POST":
-        errorName = "Please enter an user name"
+        errorName = "Please enter a user name"
         errorPassword = "Please enter a valid password"
         errorWrong = "invalid username and/or password"
         if not request.form.get("username"):
@@ -57,7 +57,8 @@ def login():
     
         session["user_id"] = rows[0]["id"]
 
-        return render_template("home.html")
+        return render_template("index.html")
+    # else direct to login page 
     else:
         return render_template("login.html")
 
@@ -69,16 +70,19 @@ def logout():
 
 @app.route("/register", methods=["GET","POST"])
 def register():
-    # registering user
+    # getting data
     name = request.form.get("username")
     password = request.form.get("password")
     confirmation = request.form.get("confirmation")
     userName = db.execute("SELECT username FROM users WHERE username = ?", name)
 
+    # error messages if user couldn't sign up
     errorName = "Please enter an user name"
     errorPassword = "Please enter a valid password"
     errorPasswordC = "Please confirm your password"
     errorExists = "User name entered already exists"
+
+    # error checking
     if request.method == "POST":
         if not name:
             return render_template("register.html", errorName = errorName, name = name)
@@ -92,24 +96,32 @@ def register():
         return login()
     return render_template("register.html")
 
-@app.route ("/home", methods=["GET","POST"])
+@app.route ("/posts", methods=["GET","POST"])
 @login_required
-def home():
+def posts():
     user_id = session["user_id"]
+    texts = db.execute("SELECT * FROM users_text WHERE text_id = ?", user_id)
+    return render_template("posts.html",text = texts)
+
+@app.route ("/createpost", methods=["GET","POST"])
+@login_required
+def createpost():
+    # TO DO creating post
+    user_id = session["user_id"]
+    title = request.form.get("title")
     text = request.form.get("ckeditor")
     if request.method == "POST":
         currentTime = db.execute("SELECT CURRENT_TIMESTAMP")[0]["CURRENT_TIMESTAMP"]
-        db.execute("INSERT INTO users_text (text_id, text, d1) VALUES(?,?,?)",user_id, text, currentTime)
-        text = db.execute("SELECT * FROM users_text WHERE text_id = ?", user_id)
-        return render_template("home.html",text = text)
-    if request.method == "GET":
+        db.execute("INSERT INTO users_text (text_id, text, d1, title) VALUES(?,?,?,?)",user_id, text, currentTime, title)
         texts = db.execute("SELECT * FROM users_text WHERE text_id = ?", user_id)
-        return render_template("home.html",text = texts)
+        return redirect ("/posts")
+    return render_template("createpost.html")
 
 @app.route ("/deletepost", methods=["POST"])
 @login_required
 def deletepost():
+    # history id is an id that is different for every post so that we can delete a post easily
     historyid = request.form.get("id")
     if id:
         db.execute("DELETE FROM users_text WHERE history_id = ?", historyid)
-    return redirect("/home")
+    return redirect("/posts")

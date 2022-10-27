@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Create post
+{% endblock %}
+
+{% block main %}
+<form method="post" action="/createpost">
+    <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="title" name="title" placeholder="Title" type="text">
+    {{ ckeditor.create() }}
+    <button class="btn btn-primary" type="submit">Save</button>
+</form>
+{% endblock %}

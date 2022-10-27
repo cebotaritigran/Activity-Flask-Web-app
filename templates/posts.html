@@ -5,13 +5,10 @@
 {% endblock %}
 
 {% block main %}
-<form method="post" action="/home">
-    {{ ckeditor.create() }}
-    <button class="btn btn-primary" type="submit">Save</button>
-</form>
 <tbody>
     {% for text in text %}
         <tr>
+            <td>{{ text.title | safe }}</td>
             <td>{{ text.text | safe }}</td>
             <td>
                 <form action="/deletepost" method="POST">
@@ -19,6 +16,7 @@
                     <input type="submit" value="Delete">
                 </form>
             </td>
+            <td> {{ text.d1 }}</td>
         </tr>
     {% endfor %}
 </tbody>
