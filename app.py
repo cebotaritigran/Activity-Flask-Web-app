@@ -96,6 +96,7 @@ def register():
         return login()
     return render_template("register.html")
 
+# page tht displays posts
 @app.route ("/posts", methods=["GET","POST"])
 @login_required
 def posts():
@@ -125,3 +126,35 @@ def deletepost():
     if id:
         db.execute("DELETE FROM users_text WHERE history_id = ?", historyid)
     return redirect("/posts")
+
+@app.route ("/createtodo", methods=["GET","POST"])
+@login_required
+def createtodo():
+    # TO DO creating post
+    user_id = session["user_id"]
+    title = request.form.get("title")
+    todo = request.form.get("todo")
+    day = request.form.get("day")
+    month = request.form.get("month")
+    year = request.form.get("year")
+    if request.method == "POST":
+        db.execute("INSERT INTO users_todo (todo_id, todo, title, month, day, year) VALUES(?,?,?,?,?,?)",user_id, todo, title, month, day, year)
+        todos = db.execute("SELECT * FROM users_todo WHERE todo_id = ?", user_id)
+        return redirect ("/todos")
+    return render_template("createtodo.html")
+
+@app.route ("/todos", methods=["GET","POST"])
+@login_required
+def todos():
+    user_id = session["user_id"]
+    todos = db.execute("SELECT * FROM users_todo WHERE todo_id = ?", user_id)
+    return render_template("todos.html",todo = todos)
+
+@app.route ("/deletetodo", methods=["POST"])
+@login_required
+def deletetodo():
+    # history id is an id that is different for every post so that we can delete a post easily
+    historyid = request.form.get("id")
+    if id:
+        db.execute("DELETE FROM users_todo WHERE history_id_todo = ?", historyid)
+    return redirect("/todos")

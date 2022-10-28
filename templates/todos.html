@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    TODO
+{% endblock %}
+
+{% block main %}
+<tbody>
+    {% for todo in todo %}
+        <tr>
+            <td>{{ todo.title | safe }}</td>
+            <td>{{ todo.todo | safe }}</td>
+            <td> {{ todo.month }} / {{ todo.day }} / {{ todo.year }}</td>
+            <td>
+                <form action="/deletetodo" method="POST">
+                    <input name="id" type="hidden" value="{{ todo.history_id_todo }}">
+                    <input type="submit" value="Delete">
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Create TODO
+{% endblock %}
+
+{% block main %}
+<form method="post" action="/createtodo">
+    <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="title" name="title" placeholder="Title" type="text">
+    <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="todo" name="todo" placeholder="TODO" type="text">
+    <input autocomplete="off" autofocus name="month" placeholder="Month" type="number" min="1" max="12">
+    <input autocomplete="off" autofocus name="day" placeholder="Day" type="number" min="1" max="31">
+    <input autocomplete="off" autofocus name="year" placeholder="Year" type="number" min="2022" max="2100">
+    <button class="btn btn-primary" type="submit">Save</button>
+</form>
+{% endblock %}
