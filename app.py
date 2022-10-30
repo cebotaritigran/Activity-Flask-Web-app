@@ -1,6 +1,6 @@
 import os
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -11,6 +11,7 @@ from login import login_required
 
 # configuring application
 app = Flask(__name__)
+app.secret_key = "test123"
 app.config['CKEDITOR_PKG_TYPE'] = 'basic'
 ckeditor = CKEditor(app)
 
@@ -158,3 +159,20 @@ def deletetodo():
     if id:
         db.execute("DELETE FROM users_todo WHERE history_id_todo = ?", historyid)
     return redirect("/todos")
+
+@app.route("/timer", methods=["GET", "POST"])
+@login_required
+def timer():
+    if request.method == "POST":
+        seconds = int(request.form["seconds"])
+        session["seconds"] = seconds
+        minutes = int(request.form["minutes"])
+        session["minutes"] = minutes
+        return redirect("/timer2")
+    if request.method == "GET":
+        return render_template("timer.html")
+
+@app.route("/timer2", methods=["GET","POST"])
+@login_required
+def timer2():
+    return render_template("timer2.html", seconds = session["seconds"], minutes = session["minutes"])
