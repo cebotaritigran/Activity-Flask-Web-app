@@ -175,4 +175,9 @@ def timer():
 @app.route("/timer2", methods=["GET","POST"])
 @login_required
 def timer2():
+    if request.method == "POST":
+        seconds = request.form.get("seconds")
+        minutes = request.form.get("minutes")
+        db.execute("INSERT INTO time_count (minutes, seconds) VALUES(?,?)",minutes, seconds )
+        return redirect("/timer")
     return render_template("timer2.html", seconds = session["seconds"], minutes = session["minutes"])

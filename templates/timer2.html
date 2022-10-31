@@ -11,7 +11,13 @@
 <span class="timer" id="timer">{{ seconds }}s
 </span>
 <progress id="test" value="{{ seconds }}" max = "{{ seconds }}""></progress>
-<input id="stopButton" type="button" value="Stop" onclick="stop();">
+<form action="/timer2" method="POST">
+  <input name="minutes" type="hidden" value="{{ minutes }}">
+  <input name="seconds" type="hidden" value="{{ seconds }}">
+  <input id="stopButton" type="button hidden" onclick="stop();">
+</form>
+
+
 <script type="application/javascript">
   const timerElement = document.getElementById("timer");
   const test = document.getElementById("test");
@@ -29,7 +35,8 @@
       if (minuteCounter == 0 && timerCounter == 1)
       {
         clearInterval(interval);
-        window.location.href = "/timer";
+        var save = document.getElementById('stopButton');
+        save.form.submit();
       }
       if (timerCounter < 1)
       {
