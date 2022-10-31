@@ -8,23 +8,33 @@
 {% block main %}
 <span class="timerM" id="timerM">{{ minutes }}
 </span>
-<span class="timer" id="timer">{{ seconds }}s
+<span class="timer" id="timer">{{ seconds }}
 </span>
 <progress id="test" value="{{ seconds }}" max = "{{ seconds }}""></progress>
 <form action="/timer2" method="POST">
-  <input name="minutes" type="hidden" value="{{ minutes }}">
-  <input name="seconds" type="hidden" value="{{ seconds }}">
-  <input id="stopButton" type="button hidden" onclick="stop();">
+  <input id="minutes" name="minutes" type="hidden">
+  <input id="seconds" name="seconds" type="hidden">
+  <input id="stopButton" type="submit" onclick="stop();">
 </form>
 
-
+<!---
+  timer function
+-->
 <script type="application/javascript">
+  // gets seconds
   const timerElement = document.getElementById("timer");
+  // progress bar TO CHANGE
   const test = document.getElementById("test");
 
-  const timerElementM = document.getElementById("timerM");
-  const testM = document.getElementById("testM");
 
+  // gets minutes
+  const timerElementM = document.getElementById("timerM");
+
+  // gets constant initial seconds an minutes
+  const minuteStable = Number(document.getElementById("timerM").innerHTML);
+  const secondStable = Number(document.getElementById("timer").innerHTML);
+
+  // assigning seconds an minutes to a variable to change later
   let minuteCounter = document.getElementById("timerM").innerHTML;
   let timerCounter = test.max;
 
@@ -32,11 +42,17 @@
   const interval = setInterval(
     function()
     {
-      if (minuteCounter == 0 && timerCounter == 1)
+      if (minuteCounter == 0 && timerCounter == 0)
       {
-        clearInterval(interval);
+        var minutes = document.getElementById("timerM").innerHTML;
+        document.getElementById("minutes").value = parseInt(minutes) + minuteStable;
+
+        var seconds = document.getElementById("timer").innerHTML;
+        document.getElementById("seconds").value = parseInt(seconds) + secondStable;
+        
         var save = document.getElementById('stopButton');
         save.form.submit();
+        clearInterval(interval);
       }
       if (timerCounter < 1)
       {
@@ -51,8 +67,14 @@
   ,1000)
   function stop() 
   {
-            clearInterval(interval);
-            window.location.href = "/timer";
+    
+      var minutes = document.getElementById("timerM").innerHTML;
+      document.getElementById("minutes").value = minuteStable - parseInt(minutes);
+
+      var seconds = document.getElementById("timer").innerHTML;
+      document.getElementById("seconds").value = secondStable - parseInt(seconds);
+      clearInterval(interval);
+      window.location.href = "/timer";
   }
 </script>
 {% endblock %}
