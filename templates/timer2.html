@@ -11,7 +11,7 @@
 <span class="timer" id="timer">{{ seconds }}s
 </span>
 <progress id="test" value="{{ seconds }}" max = "{{ seconds }}""></progress>
-
+<input id="stopButton" type="button" value="Stop" onclick="stop();">
 <script type="application/javascript">
   const timerElement = document.getElementById("timer");
   const test = document.getElementById("test");
@@ -42,5 +42,10 @@
       test.value = (minuteCounter * 60) + timerCounter;
     }
   ,1000)
+  function stop() 
+  {
+            clearInterval(interval);
+            window.location.href = "/timer";
+  }
 </script>
 {% endblock %}
