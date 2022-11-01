@@ -34,10 +34,12 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+# home page
 @app.route("/")
 def index():
     return render_template("index.html")
 
+# login page
 @app.route("/login", methods=["GET","POST"])
 def login():
     # log in user if all the error checks went ok
@@ -46,13 +48,17 @@ def login():
         errorName = "Please enter a user name"
         errorPassword = "Please enter a valid password"
         errorWrong = "invalid username and/or password"
+        # checks if user entered a username
         if not request.form.get("username"):
             return render_template("login.html", errorName = errorName)
+        #checks if user entered a password
         elif not request.form.get("password"):
             return render_template("login.html", errorPassword = errorPassword)
-    
+        
+        # searching if username exist
         rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
 
+        # checking if username exist
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
             return render_template("login.html", errorWrong = errorWrong)
     
@@ -63,12 +69,14 @@ def login():
     else:
         return render_template("login.html")
 
+# logout route
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect("/")
 
 
+# registering page
 @app.route("/register", methods=["GET","POST"])
 def register():
     # getting data
@@ -105,14 +113,22 @@ def posts():
     texts = db.execute("SELECT * FROM users_text WHERE text_id = ?", user_id)
     return render_template("posts.html",text = texts)
 
+# creating post
 @app.route ("/createpost", methods=["GET","POST"])
 @login_required
 def createpost():
-    # TO DO creating post
     user_id = session["user_id"]
     title = request.form.get("title")
     text = request.form.get("ckeditor")
+
+    # error checking
     if request.method == "POST":
+        errorNoTitle = "Please enter a title"
+        errorNoText = "Please write something before submitting"
+        if not title:
+            title = "No Title"
+        if not text:
+            return render_template("createpost.html", errorNoText = errorNoText, title = title)
         currentTime = db.execute("SELECT CURRENT_TIMESTAMP")[0]["CURRENT_TIMESTAMP"]
         db.execute("INSERT INTO users_text (text_id, text, d1, title) VALUES(?,?,?,?)",user_id, text, currentTime, title)
         texts = db.execute("SELECT * FROM users_text WHERE text_id = ?", user_id)
@@ -122,7 +138,7 @@ def createpost():
 @app.route ("/deletepost", methods=["POST"])
 @login_required
 def deletepost():
-    # history id is an id that is different for every post so that we can delete a post easily
+    # history id is an id that is different for every user and every post, so that we can delete a post easily
     historyid = request.form.get("id")
     if id:
         db.execute("DELETE FROM users_text WHERE history_id = ?", historyid)
@@ -131,14 +147,33 @@ def deletepost():
 @app.route ("/createtodo", methods=["GET","POST"])
 @login_required
 def createtodo():
-    # TO DO creating post
+    # Creating todo
     user_id = session["user_id"]
     title = request.form.get("title")
-    todo = request.form.get("todo")
+    todo = request.form.get("ckeditor")
     day = request.form.get("day")
     month = request.form.get("month")
     year = request.form.get("year")
+    # error checking
     if request.method == "POST":
+        errorNoTitle = "Please enter a title"
+        errorNoText = "Please write something before submitting"
+        errorNoDay = "Please enter a valid date"
+        errorNoMonth = "Please enter a valid date"
+        errorNoYear = "Please enter a valid date"
+        if not title:
+            return render_template("createtodo.html", errorNoTitle = errorNoTitle)
+        if not todo:
+            return render_template("createtodo.html", errorNoText = errorNoText)
+        if not day:
+            return render_template("createtodo.html", errorNoDay = errorNoDay) 
+        if not month:
+            return render_template("createtodo.html", errorNoMonth = errorNoMonth)
+        if not year:
+            return render_template("createtodo.html", errorNoYear = errorNoYear)
+        # checking if date is numeric
+        if not day.isdigit() or not month.isdigit() or not year.isdigit():
+            return render_template("createtodo.html", errorNoDay = errorNoDay)
         db.execute("INSERT INTO users_todo (todo_id, todo, title, month, day, year) VALUES(?,?,?,?,?,?)",user_id, todo, title, month, day, year)
         todos = db.execute("SELECT * FROM users_todo WHERE todo_id = ?", user_id)
         return redirect ("/todos")
@@ -173,6 +208,24 @@ def timer():
         day = request.form.get("day")
         month = request.form.get("month")
         year = request.form.get("year")
+        errorNoSeconds = "Enter a valid time"
+        errorNoMinutes = "Enter a valid time"
+        errorNoTitle = "Please enter a title"
+        errorNoDay = "Please enter a valid date"
+        errorNoMonth = "Please enter a valid date"
+        errorNoYear = "Please enter a valid date"
+        if not title:
+            return render_template("timer.html", errorNoTitle = errorNoTitle)
+        if isinstance(seconds, int) is not True or isinstance(minutes, int) is not True:
+            return render_template("timer.html", errorNoSeconds = errorNoSeconds, errorNoMinutes = errorNoMinutes)
+        if not day:
+            return render_template("timer.html", errorNoDay = errorNoDay) 
+        if not month:
+            return render_template("timer.html", errorNoMonth = errorNoMonth)
+        if not year:
+            return render_template("timer.html", errorNoYear = errorNoYear)
+        if not day.isdigit() or not month.isdigit() or not year.isdigit():
+            return render_template("timer.html", errorNoDay = errorNoDay)
         db.execute("INSERT INTO activity (activity_id, title, minutes, seconds, month, day, year) VALUES (?,?,?,?,?,?,?)",
             user_id, title, minutes, seconds, month, day, year)
         history_id = db.execute("SELECT history_id_activity FROM activity WHERE activity_id = ? ORDER BY history_id_activity DESC LIMIT 1 ", user_id)
@@ -194,3 +247,19 @@ def timecounter():
             minutes, seconds, history, user_id)
         return redirect("/timer")
     return render_template("timecounter.html", seconds = session["seconds"], minutes = session["minutes"], history_id = history)
+
+@app.route("/activity", methods=["GET","POST"])
+@login_required
+def activity():
+    user_id = session["user_id"]
+    activity = db.execute("SELECT * FROM activity WHERE activity_id = ?", user_id)
+    return render_template("activity.html", activity = activity)
+
+@app.route ("/deleteactivity", methods=["POST"])
+@login_required
+def deleteactivity():
+    # history id is an id that is different for every post so that we can delete a post easily
+    historyid = request.form.get("id")
+    if id:
+        db.execute("DELETE FROM activity WHERE history_id_activity = ?", historyid)
+    return redirect("/activity")

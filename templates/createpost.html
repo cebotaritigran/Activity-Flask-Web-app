@@ -6,8 +6,13 @@
 
 {% block main %}
 <form method="post" action="/createpost">
-    <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="title" name="title" placeholder="Title" type="text">
+    <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="title" name="title" placeholder="Title" type="text" value="{{ title }}">
     {{ ckeditor.create() }}
+    {% if errorNoText %}
+        <div class="alert alert-danger" role="alert">
+            <div>{{ errorNoText }}</div>
+        </div>
+    {% endif %}
     <button class="btn btn-primary" type="submit">Save</button>
 </form>
 {% endblock %}

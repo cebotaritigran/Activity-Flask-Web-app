@@ -7,11 +7,26 @@
 {% block main %}
 <form method="post" action="/timer" id="times">
     <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="title" name="title" placeholder="Title" type="text">
-    <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="seconds" name="seconds" placeholder="Seconds" type="number" min="1" max="60">
+    {% if errorNoTitle %}
+    <div class="alert alert-danger" role="alert">
+        <div>{{ errorNoTitle }}</div>
+    </div>
+    {% endif %}
+    <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="seconds" name="seconds" placeholder="Seconds" type="number" min="0" max="60">
     <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="minutes" name="minutes" placeholder="Minutes" type="number" min="1" max="60">
+    {% if errorNoSeconds or errorNoMinutes %}
+    <div class="alert alert-danger" role="alert">
+        <div>{{ errorNoSeconds }}</div>
+    </div>
+    {% endif %}
     <input autocomplete="off" autofocus name="month" placeholder="Month" type="number" min="1" max="12">
     <input autocomplete="off" autofocus name="day" placeholder="Day" type="number" min="1" max="31">
     <input autocomplete="off" autofocus name="year" placeholder="Year" type="number" min="2022" max="2100">
+    {% if errorNoDay or errorNoMonth or errorNoYear %}
+    <div class="alert alert-danger" role="alert">
+        <div>{{ errorNoDay }}</div>
+    </div>
+{% endif %}
     <button class="btn btn-primary" type="submit">Save</button>
 </form>
 {% endblock %}

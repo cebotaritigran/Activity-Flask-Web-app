@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Create timer
+{% endblock %}
+
+{% block main %}
+<tbody>
+    {% for activity in activity %}
+        <tr>
+            <td>{{ activity.title}}</td>
+            <td>{{ activity.minutes }} : {{ activity.seconds }}</td>
+            <td> {{ activity.month }} / {{ activity.day }} / {{ activity.year }}</td>
+            <td>
+                <form action="/deleteactivity" method="POST">
+                    <input name="id" type="hidden" value="{{ activity.history_id_activity }}">
+                    <input type="submit" value="Delete">
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>
+{% endblock %}
