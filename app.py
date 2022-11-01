@@ -163,21 +163,34 @@ def deletetodo():
 @app.route("/timer", methods=["GET", "POST"])
 @login_required
 def timer():
+    user_id = session["user_id"]
     if request.method == "POST":
         seconds = int(request.form["seconds"])
         session["seconds"] = seconds
         minutes = int(request.form["minutes"])
         session["minutes"] = minutes
-        return redirect("/timer2")
+        title = request.form.get("title")
+        day = request.form.get("day")
+        month = request.form.get("month")
+        year = request.form.get("year")
+        db.execute("INSERT INTO activity (activity_id, title, minutes, seconds, month, day, year) VALUES (?,?,?,?,?,?,?)",
+            user_id, title, minutes, seconds, month, day, year)
+        history_id = db.execute("SELECT history_id_activity FROM activity WHERE activity_id = ? ORDER BY history_id_activity DESC LIMIT 1 ", user_id)
+        return redirect("/timecounter")
     if request.method == "GET":
         return render_template("timer.html")
 
-@app.route("/timer2", methods=["GET","POST"])
+@app.route("/timecounter", methods=["GET","POST"])
 @login_required
-def timer2():
+def timecounter():
+    user_id = session["user_id"]
+    history_id = db.execute("SELECT history_id_activity FROM activity WHERE activity_id = ? ORDER BY history_id_activity DESC LIMIT 1 ", user_id)
+    history = int(history_id[0]["history_id_activity"])
+    print(history)
     if request.method == "POST":
         seconds = request.form.get("seconds")
         minutes = request.form.get("minutes")
-        db.execute("INSERT INTO time_count (minutes, seconds) VALUES(?,?)",minutes, seconds )
+        db.execute("UPDATE activity SET minutes = ?, seconds = ? WHERE history_id_activity = ? AND activity_id = ?",
+            minutes, seconds, history, user_id)
         return redirect("/timer")
-    return render_template("timer2.html", seconds = session["seconds"], minutes = session["minutes"])
+    return render_template("timecounter.html", seconds = session["seconds"], minutes = session["minutes"], history_id = history)

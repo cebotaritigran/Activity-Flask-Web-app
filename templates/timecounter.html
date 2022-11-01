@@ -1,0 +1,99 @@
+
+{% extends "layout.html" %}
+
+{% block title %}
+    timecounter
+{% endblock %}
+
+{% block main %}
+<div>
+  <span class="minuteTimer" id="minuteTimer">
+    {{ minutes }}
+  </span>
+  <span>:</span>
+  <span class="secondTimer" id="secondTimer">
+    {{ seconds }}
+  </span>
+</div>
+<form action="/timecounter" method="POST">
+  <input id="minutes" name="minutes" type="hidden">
+  <input id="seconds" name="seconds" type="hidden">
+  <input id="history_id" name="histoy_id" type="hidden" value="{{ history_id }}">
+  <input id="stopButton" type="submit" onclick="stop();" value="Stop">
+</form>
+
+<!---
+  secondTimer function
+-->
+<script type="application/javascript">
+  // gets seconds
+  const timerElement = document.getElementById("secondTimer");
+  // progress bar TO CHANGE
+  const test = document.getElementById("test");
+
+  // gets minutes
+  const timerElementM = document.getElementById("minuteTimer");
+
+  // gets constant initial seconds an minutes
+  const minuteStable = Number(document.getElementById("minuteTimer").innerHTML);
+  const secondStable = Number(document.getElementById("secondTimer").innerHTML);
+
+  // assigning seconds an minutes to a variable to change later
+  let minuteCounter = document.getElementById("minuteTimer").innerHTML;
+  let timerCounter = secondStable;
+
+  // this variable is for the function stop we will increment it to later save it as data
+  let timerCounterStop = 0;
+
+  // timer
+  const interval = setInterval(
+    function()
+    {
+      // when the timer ends add the total amount of activity in users activity database
+      if (minuteCounter == 0 && timerCounter == 0)
+      {
+        // getting number of minutes user input
+        var minutes = document.getElementById("minuteTimer").innerHTML; 
+        // changing the value to the total amount of minutes activity done
+        document.getElementById("minutes").value = parseInt(minutes) + minuteStable;
+
+        var seconds = document.getElementById("secondTimer").innerHTML;
+        document.getElementById("seconds").value = parseInt(seconds) + secondStable;
+        
+        // submiting the form when timer ends
+        var save = document.getElementById('stopButton');
+        save.form.submit();
+        clearInterval(interval);
+      }
+
+      // to calculate whether a minute has passed
+      if (timerCounter <= 1)
+      {
+        minuteCounter = minuteCounter - 1;
+        timerCounter = timerCounter + 60;
+      }
+      
+      // decrement timer by 1 every second
+      timerCounter = timerCounter - 1;
+      // increment stop timer that we are going to use if user decides to stop earlier to determine how much time has passed
+      timerCounterStop = timerCounterStop + 1;
+
+      // showing time with html
+      timerElement.innerText = timerCounter;
+      timerElementM.innerText = minuteCounter;
+    }
+  ,1000)
+
+  // if user decides to stop earlier calculate how much time he spent doing a particular activity
+  function stop() 
+  {
+      var minutes = document.getElementById("minuteTimer").innerHTML;
+      document.getElementById("minutes").value = Math.floor(timerCounterStop / 60);
+
+      var seconds = document.getElementById("secondTimer").innerHTML;
+      document.getElementById("seconds").value = timerCounterStop % 60;
+      clearInterval(interval);
+      window.location.href = "/secondTimer";
+  }
+</script>
+{% endblock %}
