@@ -50,7 +50,7 @@
     function()
     {
       // when the timer ends add the total amount of activity in users activity database
-      if (minuteCounter == 0 && timerCounter == 0)
+      if (minuteCounter == 0 && timerCounter <= 1 )
       {
         // getting number of minutes user input
         var minutes = document.getElementById("minuteTimer").innerHTML; 

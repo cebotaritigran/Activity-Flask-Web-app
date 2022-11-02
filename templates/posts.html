@@ -5,25 +5,28 @@
 {% endblock %}
 
 {% block main %}
-<tbody>
+<h2>Documents</h2>
+
+
     {% for text in text %}
-        <tr>
-            <td>{{ text.title | safe }}</td>
-            <td>{{ text.text | safe }}</td>
-            <td>
-                <form action="/deletepost" method="POST">
+    
+        <div class="card border-dark">
+            <div class="card-header d-flex justify-content-center"><h5>{{ text.title | safe }}</h5></div>
+            <div class="card-body">{{ text.text | safe }}</div>
+            <div class="card-footer text-muted">
+                {{ text.d1 }}
+                <div class="btn-group">
+                <form action="/deletepost" method="POST" id="buttonDelete">
                     <input name="id" type="hidden" value="{{ text.history_id }}">
-                    <input type="submit" value="Delete">
+                    <button type="submit" class="btn btn-primary">Delete</button>
                 </form>
-            </td>
-            <td> {{ text.d1 }}</td>
-            <td>
-                <form action="/editpostbutton" method="POST">
+                <form action="/editpostbutton" method="POST" id="buttonEdit">
                     <input name="id" type="hidden" value="{{ text.history_id }}">
-                    <input type="submit" value="Edit">
+                    <button type="submit" class="btn btn-primary">Edit</button>
                 </form>
-            </td>
-        </tr>
+                </div>
+            </div>
+        </div>          
     {% endfor %}
-</tbody>
+        
 {% endblock %}

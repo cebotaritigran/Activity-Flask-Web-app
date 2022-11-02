@@ -5,9 +5,11 @@
 {% endblock %}
 
 {% block main %}
+<h2>Create Document</h2>
+<div class="card border-dark">
 <form method="post" action="/createpost">
-    <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="title" name="title" placeholder="Title" type="text" value="{{ title }}">
-    {{ ckeditor.create() }}
+    <input autocomplete="off" autofocus class="form-control" id="title" name="title" placeholder="Title" type="text" value="{{ title }}">
+        {{ ckeditor.create() }}
     {% if errorNoText %}
         <div class="alert alert-danger" role="alert">
             <div>{{ errorNoText }}</div>
@@ -15,4 +17,5 @@
     {% endif %}
     <button class="btn btn-primary" type="submit">Save</button>
 </form>
+</div>
 {% endblock %}

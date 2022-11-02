@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-<tbody>
+<div class="card border-dark">
     <form method="post" action="/edittodo">
         <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="title" name="title" placeholder="Title" type="text" value="{{ title }}">
         {% if errorNoTitle %}
@@ -30,5 +30,5 @@
         <input name="id" type="hidden" value="{{ id }}">
         <button class="btn btn-primary" type="submit">Save</button>
     </form>
-</tbody>
+</div>
 {% endblock %}

@@ -3,3 +3,28 @@
     width:20%;
     margin: auto auto;   
 }
+
+#buttonDelete
+{
+padding: 1%;
+}
+
+#buttonEdit
+{
+padding: 1%;
+}
+
+#title
+{
+    width: 100%;
+}
+
+#timer
+{
+    padding: 1%;
+}
+
+#stopButton
+{
+    color: blue;
+}

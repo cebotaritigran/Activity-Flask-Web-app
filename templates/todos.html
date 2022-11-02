@@ -5,25 +5,27 @@
 {% endblock %}
 
 {% block main %}
-<tbody>
+<h2>TODO</h2>
     {% for todo in todo %}
-        <tr>
-            <td>{{ todo.title | safe }}</td>
-            <td>{{ todo.todo | safe }}</td>
-            <td> {{ todo.month }} / {{ todo.day }} / {{ todo.year }}</td>
-            <td>
-                <form action="/deletetodo" method="POST">
-                    <input name="id" type="hidden" value="{{ todo.history_id_todo }}">
-                    <input type="submit" value="Delete">
-                </form>
-            </td>
-            <td>
-                <form action="/edittodobutton" method="POST">
-                    <input name="id" type="hidden" value="{{ todo.history_id_todo }}">
-                    <input type="submit" value="Edit">
-                </form>
-            </td>
-        </tr>
+    <div class="card border-dark">
+        <div class="card-header d-flex justify-content-center"><h5>{{ todo.title | safe }}</h5></div>
+        <div class="card-body">{{ todo.todo | safe }}</div>
+        <div class="card-footer text-muted">{{ todo.month }} / {{ todo.day }} / {{ todo.year }}
+            <div class="btn-group">
+            <form action="/deletetodo" method="POST" id="buttonDelete">
+                <input name="id" type="hidden" value="{{ todo.history_id_todo }}">
+                <button type="submit" class="btn btn-primary">Delete</button>
+            </form>
+
+            <form action="/edittodobutton" method="POST" id="buttonEdit">
+                <input name="id" type="hidden" value="{{ todo.history_id_todo }}">
+                <button type="submit" class="btn btn-primary">Edit</button>
+            </form>
+            </div>
+        </div>
+
+
+            </div>
     {% endfor %}
-</tbody>
+
 {% endblock %}

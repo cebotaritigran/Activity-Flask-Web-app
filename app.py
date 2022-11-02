@@ -66,7 +66,7 @@ def login():
     
         session["user_id"] = rows[0]["id"]
 
-        return render_template("index.html")
+        return redirect("/posts")
     # else direct to login page 
     else:
         return render_template("login.html")
