@@ -41,7 +41,7 @@ def index():
     return render_template("index.html")
 
 
-# login page
+# LOGIN PAGE
 @app.route("/login", methods=["GET","POST"])
 def login():
     # log in user if all the error checks went ok
@@ -72,14 +72,14 @@ def login():
         return render_template("login.html")
 
 
-# logout route
+# LOGOUT
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect("/")
 
 
-# registering page
+# REGISTER PAGE
 @app.route("/register", methods=["GET","POST"])
 def register():
     # getting data
@@ -109,7 +109,7 @@ def register():
     return render_template("register.html")
 
 
-# page tht displays posts
+# POSTS PAGE
 @app.route ("/posts", methods=["GET","POST"])
 @login_required
 def posts():
@@ -118,7 +118,7 @@ def posts():
     return render_template("posts.html",text = texts)
 
 
-# creating post
+# CREATING POSTS
 @app.route ("/createpost", methods=["GET","POST"])
 @login_required
 def createpost():
@@ -142,6 +142,7 @@ def createpost():
     return render_template("createpost.html")
 
 
+# BUTTON TO EDIT POSTS
 @app.route ("/editpostbutton", methods=["GET","POST"])
 @login_required
 def editpostbutton():
@@ -203,18 +204,18 @@ def createtodo():
         errorNoYear = "Please enter a valid date"
 
         if not title:
-            return render_template("createtodo.html", errorNoTitle = errorNoTitle)
+            return render_template("createtodo.html", errorNoTitle = errorNoTitle, todo = todo, day = day, month = month, year = year)
         if not todo:
-            return render_template("createtodo.html", errorNoText = errorNoText)
+            return render_template("createtodo.html", errorNoText = errorNoText, title = title, day = day, month = month, year = year )
         if not day:
-            return render_template("createtodo.html", errorNoDay = errorNoDay) 
+            return render_template("createtodo.html", errorNoDay = errorNoDay, title = title, todo = todo, month = month, year = year ) 
         if not month:
-            return render_template("createtodo.html", errorNoMonth = errorNoMonth)
+            return render_template("createtodo.html", errorNoMonth = errorNoMonth, title = title, todo = todo, day = day, year = year)
         if not year:
-            return render_template("createtodo.html", errorNoYear = errorNoYear)
+            return render_template("createtodo.html", errorNoYear = errorNoYear, title = title, todo = todo, day = day, month = month)
         # checking if date is numeric
         if not day.isdigit() or not month.isdigit() or not year.isdigit():
-            return render_template("createtodo.html", errorNoDay = errorNoDay)
+            return render_template("createtodo.html", errorNoDay = errorNoDay, title = title, todo = todo)
 
         db.execute("INSERT INTO users_todo (todo_id, todo, title, month, day, year) VALUES(?,?,?,?,?,?)",user_id, todo, title, month, day, year)
         todos = db.execute("SELECT * FROM users_todo WHERE todo_id = ?", user_id)
@@ -262,18 +263,18 @@ def edittodo():
         errorNoYear = "Please enter a valid date"
 
         if not title:
-            return render_template("edittodo.html", errorNoTitle = errorNoTitle)
+            return render_template("edittodo.html", errorNoTitle = errorNoTitle, todo = todo, day = day, month = month, year = year)
         if not todo:
-            return render_template("edittodo.html", errorNoText = errorNoText)
+            return render_template("edittodo.html", errorNoText = errorNoText, title = title, day = day, month = month, year = year)
         if not day:
-            return render_template("edittodo.html", errorNoDay = errorNoDay) 
+            return render_template("edittodo.html", errorNoDay = errorNoDay, title = title, todo = todo, month = month, year = year) 
         if not month:
-            return render_template("edittodo.html", errorNoMonth = errorNoMonth)
+            return render_template("edittodo.html", errorNoMonth = errorNoMonth, title = title, todo = todo, day = day, year = year)
         if not year:
-            return render_template("edittodo.html", errorNoYear = errorNoYear)
+            return render_template("edittodo.html", errorNoYear = errorNoYear, title = title, todo = todo, day = day, month = month)
         # checking if date is numeric
         if not day.isdigit() or not month.isdigit() or not year.isdigit():
-            return render_template("edittodo.html", errorNoDay = errorNoDay)
+            return render_template("edittodo.html", errorNoDay = errorNoDay, todo = todo, title = title)
 
         db.execute("UPDATE users_todo SET title = ?, todo = ?, day = ?, month = ?, year = ? WHERE todo_id = ? AND history_id_todo = ?",
             title, todo, day, month, year, user_id, historyid)
@@ -289,6 +290,7 @@ def deletetodo():
     if id:
         db.execute("DELETE FROM users_todo WHERE history_id_todo = ?", historyid)
     return redirect("/todos")
+
 
 @app.route("/timer", methods=["GET", "POST"])
 @login_required
