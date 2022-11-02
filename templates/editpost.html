@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Edit Post
+{% endblock %}
+
+{% block main %}
+<tbody>
+    <form method="post" action="/editpost">
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="title" name="title" placeholder="Title" type="text" value="{{ title }}">
+        {{ ckeditor.create(value= text) }}
+        {% if errorNoText %}
+            <div class="alert alert-danger" role="alert">
+                <div>{{ errorNoText }}</div>
+            </div>
+        {% endif %}
+        <input name="id" type="hidden" value="{{ id }}">
+        <button class="btn btn-primary" type="submit">Save</button>
+    </form>
+</tbody>
+{% endblock %}

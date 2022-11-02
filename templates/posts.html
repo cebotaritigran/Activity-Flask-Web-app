@@ -17,6 +17,12 @@
                 </form>
             </td>
             <td> {{ text.d1 }}</td>
+            <td>
+                <form action="/editpostbutton" method="POST">
+                    <input name="id" type="hidden" value="{{ text.history_id }}">
+                    <input type="submit" value="Edit">
+                </form>
+            </td>
         </tr>
     {% endfor %}
 </tbody>

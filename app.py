@@ -34,10 +34,12 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+
 # home page
 @app.route("/")
 def index():
     return render_template("index.html")
+
 
 # login page
 @app.route("/login", methods=["GET","POST"])
@@ -68,6 +70,7 @@ def login():
     # else direct to login page 
     else:
         return render_template("login.html")
+
 
 # logout route
 @app.route("/logout")
@@ -105,6 +108,7 @@ def register():
         return login()
     return render_template("register.html")
 
+
 # page tht displays posts
 @app.route ("/posts", methods=["GET","POST"])
 @login_required
@@ -112,6 +116,7 @@ def posts():
     user_id = session["user_id"]
     texts = db.execute("SELECT * FROM users_text WHERE text_id = ?", user_id)
     return render_template("posts.html",text = texts)
+
 
 # creating post
 @app.route ("/createpost", methods=["GET","POST"])
@@ -125,6 +130,7 @@ def createpost():
     if request.method == "POST":
         errorNoTitle = "Please enter a title"
         errorNoText = "Please write something before submitting"
+        
         if not title:
             title = "No Title"
         if not text:
@@ -134,6 +140,40 @@ def createpost():
         texts = db.execute("SELECT * FROM users_text WHERE text_id = ?", user_id)
         return redirect ("/posts")
     return render_template("createpost.html")
+
+
+@app.route ("/editpostbutton", methods=["GET","POST"])
+@login_required
+def editpostbutton():
+    user_id = session["user_id"]
+    historyid = request.form.get("id")
+    if id:
+        title = db.execute("SELECT title FROM users_text WHERE history_id = ? AND text_id = ?", historyid, user_id)[0]["title"]
+        text = db.execute("SELECT text FROM users_text WHERE history_id = ? AND text_id = ?", historyid, user_id)[0]["text"]
+        return render_template("editpost.html", title = title, text = text, id = historyid)
+
+
+@app.route ("/editpost", methods=["GET", "POST"])
+@login_required
+def editpost():
+    user_id = session["user_id"]
+    historyid = request.form.get("id")
+    if request.method == "POST":
+        title = request.form.get("title")
+        text = request.form.get("ckeditor")
+
+        errorNoTitle = "Please enter a title"
+        errorNoText = "Please write something before submitting"
+
+        if not title:
+            title = "No Title"
+        if not text:
+            return render_template("editpost.html", errorNoText = errorNoText, title = title)
+
+        db.execute("UPDATE users_text SET title = ?, text = ? WHERE text_id = ? AND history_id = ?", title, text, user_id, historyid)
+        return redirect("/posts")
+    return redirect("/posts")
+    
 
 @app.route ("/deletepost", methods=["POST"])
 @login_required
@@ -161,6 +201,7 @@ def createtodo():
         errorNoDay = "Please enter a valid date"
         errorNoMonth = "Please enter a valid date"
         errorNoYear = "Please enter a valid date"
+
         if not title:
             return render_template("createtodo.html", errorNoTitle = errorNoTitle)
         if not todo:
@@ -174,6 +215,7 @@ def createtodo():
         # checking if date is numeric
         if not day.isdigit() or not month.isdigit() or not year.isdigit():
             return render_template("createtodo.html", errorNoDay = errorNoDay)
+
         db.execute("INSERT INTO users_todo (todo_id, todo, title, month, day, year) VALUES(?,?,?,?,?,?)",user_id, todo, title, month, day, year)
         todos = db.execute("SELECT * FROM users_todo WHERE todo_id = ?", user_id)
         return redirect ("/todos")
@@ -185,6 +227,59 @@ def todos():
     user_id = session["user_id"]
     todos = db.execute("SELECT * FROM users_todo WHERE todo_id = ?", user_id)
     return render_template("todos.html",todo = todos)
+
+
+@app.route ("/edittodobutton", methods=["GET","POST"])
+@login_required
+def edittodobutton():
+    user_id = session["user_id"]
+    historyid = request.form.get("id")
+    if id:
+        title = db.execute("SELECT title FROM users_todo WHERE history_id_todo = ? AND todo_id = ?", historyid, user_id)[0]["title"]
+        todo = db.execute("SELECT todo FROM users_todo WHERE history_id_todo = ? AND todo_id = ?", historyid, user_id)[0]["todo"]
+        day = db.execute("SELECT day FROM users_todo WHERE history_id_todo = ? AND todo_id = ?", historyid, user_id)[0]["day"]
+        month = db.execute("SELECT month FROM users_todo WHERE history_id_todo = ? AND todo_id = ?", historyid, user_id)[0]["month"]
+        year = db.execute("SELECT year FROM users_todo WHERE history_id_todo = ? AND todo_id = ?", historyid, user_id)[0]["year"]
+        return render_template("edittodo.html", title = title, todo = todo, id = historyid, day = day, month = month, year = year)
+
+
+@app.route ("/edittodo", methods=["GET", "POST"])
+@login_required
+def edittodo():
+    user_id = session["user_id"]
+    historyid = request.form.get("id")
+    if request.method == "POST":
+        title = request.form.get("title")
+        todo = request.form.get("ckeditor")
+        day = request.form.get("day")
+        month = request.form.get("month")
+        year = request.form.get("year")
+
+        errorNoTitle = "Please enter a title"
+        errorNoText = "Please write something before saving"
+        errorNoDay = "Please enter a valid date"
+        errorNoMonth = "Please enter a valid date"
+        errorNoYear = "Please enter a valid date"
+
+        if not title:
+            return render_template("edittodo.html", errorNoTitle = errorNoTitle)
+        if not todo:
+            return render_template("edittodo.html", errorNoText = errorNoText)
+        if not day:
+            return render_template("edittodo.html", errorNoDay = errorNoDay) 
+        if not month:
+            return render_template("edittodo.html", errorNoMonth = errorNoMonth)
+        if not year:
+            return render_template("edittodo.html", errorNoYear = errorNoYear)
+        # checking if date is numeric
+        if not day.isdigit() or not month.isdigit() or not year.isdigit():
+            return render_template("edittodo.html", errorNoDay = errorNoDay)
+
+        db.execute("UPDATE users_todo SET title = ?, todo = ?, day = ?, month = ?, year = ? WHERE todo_id = ? AND history_id_todo = ?",
+            title, todo, day, month, year, user_id, historyid)
+        return redirect("/todos")
+    return redirect("/todos")
+
 
 @app.route ("/deletetodo", methods=["POST"])
 @login_required
@@ -204,16 +299,19 @@ def timer():
         session["seconds"] = seconds
         minutes = int(request.form["minutes"])
         session["minutes"] = minutes
+
         title = request.form.get("title")
         day = request.form.get("day")
         month = request.form.get("month")
         year = request.form.get("year")
+
         errorNoSeconds = "Enter a valid time"
         errorNoMinutes = "Enter a valid time"
         errorNoTitle = "Please enter a title"
         errorNoDay = "Please enter a valid date"
         errorNoMonth = "Please enter a valid date"
         errorNoYear = "Please enter a valid date"
+
         if not title:
             return render_template("timer.html", errorNoTitle = errorNoTitle)
         if isinstance(seconds, int) is not True or isinstance(minutes, int) is not True:
@@ -226,9 +324,12 @@ def timer():
             return render_template("timer.html", errorNoYear = errorNoYear)
         if not day.isdigit() or not month.isdigit() or not year.isdigit():
             return render_template("timer.html", errorNoDay = errorNoDay)
+
         db.execute("INSERT INTO activity (activity_id, title, minutes, seconds, month, day, year) VALUES (?,?,?,?,?,?,?)",
             user_id, title, minutes, seconds, month, day, year)
+
         history_id = db.execute("SELECT history_id_activity FROM activity WHERE activity_id = ? ORDER BY history_id_activity DESC LIMIT 1 ", user_id)
+        
         return redirect("/timecounter")
     if request.method == "GET":
         return render_template("timer.html")
@@ -237,14 +338,17 @@ def timer():
 @login_required
 def timecounter():
     user_id = session["user_id"]
+
     history_id = db.execute("SELECT history_id_activity FROM activity WHERE activity_id = ? ORDER BY history_id_activity DESC LIMIT 1 ", user_id)
     history = int(history_id[0]["history_id_activity"])
-    print(history)
+
     if request.method == "POST":
         seconds = request.form.get("seconds")
         minutes = request.form.get("minutes")
+
         db.execute("UPDATE activity SET minutes = ?, seconds = ? WHERE history_id_activity = ? AND activity_id = ?",
             minutes, seconds, history, user_id)
+
         return redirect("/timer")
     return render_template("timecounter.html", seconds = session["seconds"], minutes = session["minutes"], history_id = history)
 

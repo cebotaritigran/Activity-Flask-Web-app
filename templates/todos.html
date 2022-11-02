@@ -17,6 +17,12 @@
                     <input type="submit" value="Delete">
                 </form>
             </td>
+            <td>
+                <form action="/edittodobutton" method="POST">
+                    <input name="id" type="hidden" value="{{ todo.history_id_todo }}">
+                    <input type="submit" value="Edit">
+                </form>
+            </td>
         </tr>
     {% endfor %}
 </tbody>
