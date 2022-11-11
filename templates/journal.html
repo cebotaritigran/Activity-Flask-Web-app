@@ -1,18 +1,21 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Posts
+    Journal
 {% endblock %}
 
 {% block main %}
-<h2>Documents</h2>
-
-
+<h2>Journal</h2>
+<a class="nav-linkC" href="/createpost">New Entry</a>
     {% for text in text %}
-    
-        <div class="card border-dark">
-            <div class="card-header d-flex justify-content-center"><h5>{{ text.title | safe }}</h5></div>
-            <div class="card-body">{{ text.text | safe }}</div>
+    <div class="journaldiv">
+        <div class="card border-dark w-75">
+            <div class="card-header d-flex justify-content-center " ><h5>{{ text.title | safe }}</h5></div>
+            <div class="card-body"><div id="texttext">{{ text.text | safe }}</div></p>
+                <style>
+                    #texttext{text-align: left;}
+                </style>
+            </div>
             <div class="card-footer text-muted">
                 {{ text.d1 }}
                 <div class="btn-group">
@@ -26,7 +29,8 @@
                 </form>
                 </div>
             </div>
-        </div>          
+        </div>
+    </div>          
     {% endfor %}
         
 {% endblock %}

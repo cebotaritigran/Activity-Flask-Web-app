@@ -1,3 +1,12 @@
+.journaldiv
+{
+    margin: 0 auto;
+    max-width: 700px;
+    height: 100px;
+    background-color: #ccc;
+    border-radius: 3px;
+}
+
 .alert 
 {
     width:20%;
@@ -27,4 +36,162 @@ padding: 1%;
 #stopButton
 {
     color: blue;
+}
+
+:root 
+{
+    font-size: 16px;
+    --text-primary: #c7c4c4;
+    --text-secondary: #f0ecec;
+    --bg-primary: #2e2e40;
+    --bg-secondary: #131318;
+    --transition-speed: 600ms;
+}
+
+body
+{
+    color: black;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+}
+
+body::-webkit-scrollbar
+{
+    width: 0.30rem;
+}
+
+body::-webkit-scrollbar-track
+{
+    background: rgb(47, 46, 50);
+}
+
+body::-webkit-scrollbar-thumb
+{
+    background: rgb(243, 36, 36);
+}
+
+
+main
+{
+    margin-left: 5rem;
+    padding: 1rem;
+}
+
+.navbar
+{
+    width: 5rem;
+    height: 100vh;
+    position: fixed;
+    background-color: var(--bg-primary);
+    transition: width 150ms ease;
+}
+
+.navbar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.nav-item {
+    width: 100%;
+  }
+
+.nav-item:last-child
+{
+    margin-top: auto;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    height: 5rem;
+    margin-top: 0;
+    color: var(--text-primary);
+    text-decoration: none;
+    filter: grayscale(100%) opacity(0.7);
+    transition: var(--transition-speed);
+  }
+
+.nav-link:hover {
+  filter: grayscale(0%) opacity(1);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+svg
+{
+    fill: rgb(255, 74, 74);
+    stroke: rgb(255, 83, 83);
+}
+
+.link-text{
+    display: none;
+    margin-left: 0rem;
+    margin-right: 1rem;
+
+}
+
+.nav-link svg {
+    width: 2rem;
+    min-width: 2rem;
+    margin: 0 1.5rem;
+}
+
+.navbar:hover{
+    width: 12.5rem;
+}
+
+.navbar:hover .link-text {
+    display: block;
+}
+
+.logo
+{
+    margin-top: 0px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    font-size: 1.2rem;
+    letter-spacing: 0.2ch;
+    width: 100%;
+}
+
+.logo svg {
+    transform: rotate(0deg);
+    transition: var(--transition-speed);
+  }
+  
+  .logo-text
+  {
+    display: inline;
+    position: absolute;
+    left: -999px;
+    transition: var(--transition-speed);
+  }
+  
+  .navbar:hover .logo svg {
+    transform: rotate(-180deg);
+  }
+
+  @media (max-width: 480px) {
+    #div {
+        top: 50%; /* IMPORTANT */
+        left: 50%; /* IMPORTANT */
+        display: block;
+        position: absolute;
+        background: url(images/background.png) no-repeat center center;
+        width: 750px;
+        height: 417px;
+
+        margin-top: -208.5px; /* HALF OF THE HEIGHT */
+        margin-left: -375px; /* HALF OF THE WIDTH */
+    }
 }

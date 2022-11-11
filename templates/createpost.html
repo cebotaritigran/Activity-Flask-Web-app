@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Create post
+    New Entry
 {% endblock %}
 
 {% block main %}
-<h2>Create Document</h2>
+<h2>New Entry</h2>
 <div class="card border-dark">
 <form method="post" action="/createpost">
     <input autocomplete="off" autofocus class="form-control" id="title" name="title" placeholder="Title" type="text" value="{{ title }}">

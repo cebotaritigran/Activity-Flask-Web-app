@@ -6,7 +6,7 @@
 
 {% block main %}
 <div class="d-flex justify-content-center">
-<div class="card border-dark w-25 p-3 align-items-center justify-content-center h-100 d-flex"> 
+<div class="card border-dark w-50 p-3 align-items-center justify-content-center h-100 d-flex"> 
     <form method="post" action="/timer" id="times">
         <input autocomplete="off" autofocus class="form-control" id="title" name="title" placeholder="Title" type="text">
         {% if errorNoTitle %}
@@ -14,19 +14,13 @@
             <div>{{ errorNoTitle }}</div>
         </div>
         {% endif %}
-        <input autocomplete="off" autofocus class="form-control " id="seconds" name="seconds" placeholder="Seconds" type="number" min="0" max="60">
-        <input autocomplete="off" autofocus class="form-control" id="minutes" name="minutes" placeholder="Minutes" type="number" min="1" max="60">
+        Minutes
+        <input autocomplete="off" autofocus class="form-control" id="minutes" name="minutes" placeholder="Minutes" type="number" min="1" max="60" value="1">
+        Seconds
+        <input autocomplete="off" autofocus class="form-control " id="seconds" name="seconds" placeholder="Seconds" type="number" min="0" max="60" value="0">
         {% if errorNoSeconds or errorNoMinutes %}
         <div class="alert alert-danger" role="alert">
             <div>{{ errorNoSeconds }}</div>
-        </div>
-        {% endif %}
-        <input autocomplete="off" autofocus class="form-control" name="month" placeholder="Month" type="number" min="1" max="12">
-        <input autocomplete="off" autofocus class="form-control" name="day" placeholder="Day" type="number" min="1" max="31">
-        <input autocomplete="off" autofocus class="form-control" name="year" placeholder="Year" type="number" min="2022" max="2100">
-        {% if errorNoDay or errorNoMonth or errorNoYear %}
-        <div class="alert alert-danger" role="alert">
-            <div>{{ errorNoDay }}</div>
         </div>
         {% endif %}
         <button class="btn btn-primary" type="submit">Start</button>

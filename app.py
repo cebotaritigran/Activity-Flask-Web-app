@@ -66,7 +66,7 @@ def login():
     
         session["user_id"] = rows[0]["id"]
 
-        return redirect("/posts")
+        return redirect("/journal")
     # else direct to login page 
     else:
         return render_template("login.html")
@@ -110,12 +110,12 @@ def register():
 
 
 # POSTS PAGE
-@app.route ("/posts", methods=["GET","POST"])
+@app.route ("/journal", methods=["GET","POST"])
 @login_required
-def posts():
+def journal():
     user_id = session["user_id"]
     texts = db.execute("SELECT * FROM users_text WHERE text_id = ?", user_id)
-    return render_template("posts.html",text = texts)
+    return render_template("journal.html",text = texts)
 
 
 # CREATING POSTS
@@ -138,7 +138,7 @@ def createpost():
         currentTime = db.execute("SELECT CURRENT_TIMESTAMP")[0]["CURRENT_TIMESTAMP"]
         db.execute("INSERT INTO users_text (text_id, text, d1, title) VALUES(?,?,?,?)",user_id, text, currentTime, title)
         texts = db.execute("SELECT * FROM users_text WHERE text_id = ?", user_id)
-        return redirect ("/posts")
+        return redirect ("/journal")
     return render_template("createpost.html")
 
 
@@ -172,8 +172,8 @@ def editpost():
             return render_template("editpost.html", errorNoText = errorNoText, title = title)
 
         db.execute("UPDATE users_text SET title = ?, text = ? WHERE text_id = ? AND history_id = ?", title, text, user_id, historyid)
-        return redirect("/posts")
-    return redirect("/posts")
+        return redirect("/journal")
+    return redirect("/journal")
     
 
 @app.route ("/deletepost", methods=["POST"])
@@ -183,7 +183,7 @@ def deletepost():
     historyid = request.form.get("id")
     if id:
         db.execute("DELETE FROM users_text WHERE history_id = ?", historyid)
-    return redirect("/posts")
+    return redirect("/journal")
 
 @app.route ("/createtodo", methods=["GET","POST"])
 @login_required
@@ -310,25 +310,14 @@ def timer():
         errorNoSeconds = "Enter a valid time"
         errorNoMinutes = "Enter a valid time"
         errorNoTitle = "Please enter a title"
-        errorNoDay = "Please enter a valid date"
-        errorNoMonth = "Please enter a valid date"
-        errorNoYear = "Please enter a valid date"
 
         if not title:
             return render_template("timer.html", errorNoTitle = errorNoTitle)
         if isinstance(seconds, int) is not True or isinstance(minutes, int) is not True:
             return render_template("timer.html", errorNoSeconds = errorNoSeconds, errorNoMinutes = errorNoMinutes)
-        if not day:
-            return render_template("timer.html", errorNoDay = errorNoDay) 
-        if not month:
-            return render_template("timer.html", errorNoMonth = errorNoMonth)
-        if not year:
-            return render_template("timer.html", errorNoYear = errorNoYear)
-        if not day.isdigit() or not month.isdigit() or not year.isdigit():
-            return render_template("timer.html", errorNoDay = errorNoDay)
-
-        db.execute("INSERT INTO activity (activity_id, title, minutes, seconds, month, day, year) VALUES (?,?,?,?,?,?,?)",
-            user_id, title, minutes, seconds, month, day, year)
+        currentTime = db.execute("SELECT CURRENT_TIMESTAMP")[0]["CURRENT_TIMESTAMP"]
+        db.execute("INSERT INTO activity (activity_id, title, minutes, seconds, d2) VALUES (?,?,?,?,?)",
+            user_id, title, minutes, seconds, currentTime)
 
         history_id = db.execute("SELECT history_id_activity FROM activity WHERE activity_id = ? ORDER BY history_id_activity DESC LIMIT 1 ", user_id)
         
