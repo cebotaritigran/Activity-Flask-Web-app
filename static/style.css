@@ -62,7 +62,7 @@ body::-webkit-scrollbar-track
 
 body::-webkit-scrollbar-thumb
 {
-    background: rgb(243, 36, 36);
+    background: rgb(36, 146, 243);
 }
 
 
@@ -79,6 +79,7 @@ main
     position: fixed;
     background-color: var(--bg-primary);
     transition: width 600ms ease;
+    z-index: 2;
 }
 
 .navbar-nav {
@@ -114,8 +115,8 @@ main
 
 svg
 {
-    fill: rgb(255, 74, 74);
-    stroke: rgb(255, 83, 83);
+    fill: rgb(74, 146, 255);
+    stroke: rgb(83, 129, 255);
 }
 
 .link-text{
@@ -131,7 +132,7 @@ svg
 }
 
 .navbar:hover{
-    width: 13rem;
+    width: 12rem;
 }
 
 .logo {
@@ -141,7 +142,7 @@ svg
     text-align: center;
     color: var(--text-secondary);
     background: var(--bg-secondary);
-    font-size: 1rem;
+    font-size: 0.83rem;
     letter-spacing: 0.3ch;
     width: 100%;
   }
@@ -214,5 +215,42 @@ width: 4.1rem;
 }
 
 #container{
-  margin-left: 2.5rem;
+  margin-left: 0rem;
 }
+
+.collapse {
+  height: 50vh;
+  overflow: scroll;
+  text-align: left;
+}
+
+.card {
+  border: 0.001rem solid;
+}
+
+.card-header{
+  background-color: #f9f9f9;
+  text-align: left;
+}
+
+#header
+{
+  background-color: rgb(255, 255, 255);
+  height: 20vh;
+  color: #0073ff;
+  z-index: 1;
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 1rem;
+  margin-top: 0;
+  position:relative;
+}
+#space{
+  height: 30vh;
+}
+
+#text-header
+{
+  font-weight: 500;
+}
+

@@ -5,7 +5,17 @@
 {% endblock %}
 
 {% block main %}
-
+<div>
+    <div id="header">
+        <h1 id="h1-header">ACTIVITY</h1>
+        <p id="text-header">
+            Keep track of your time.
+        </p>
+        <a class="nav-linkC" href="/timer"><button class="btn btn-outline-primary" >
+            New Activity Timer
+        </button></a>
+    </div>  
+</div>
     {% for activity in activity %}
     <div class="d-flex justify-content-center" id="timer">
         <div class="card border-dark">

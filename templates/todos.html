@@ -5,27 +5,43 @@
 {% endblock %}
 
 {% block main %}
-<h2>TODO</h2>
+<div>
+    <div id="header">
+        <h1 id="h1-header">TODO</h1>
+        <p id="text-header">
+            Keep track of your todos.
+        </p>
+        <a class="nav-linkC" href="/createtodo"><button class="btn btn-outline-primary" >
+            New TODO
+        </button></a>
+    </div>  
+</div>
     {% for todo in todo %}
-    <div class="card border-dark">
-        <div class="card-header d-flex justify-content-center"><h5>{{ todo.title | safe }}</h5></div>
-        <div class="card-body">{{ todo.todo | safe }}</div>
-        <div class="card-footer text-muted">{{ todo.month }} / {{ todo.day }} / {{ todo.year }}
-            <div class="btn-group">
-            <form action="/deletetodo" method="POST" id="buttonDelete">
-                <input name="id" type="hidden" value="{{ todo.history_id_todo }}">
-                <button type="submit" class="btn btn-primary">Delete</button>
-            </form>
-
-            <form action="/edittodobutton" method="POST" id="buttonEdit">
-                <input name="id" type="hidden" value="{{ todo.history_id_todo }}">
-                <button type="submit" class="btn btn-primary">Edit</button>
-            </form>
+    <div class="d-flex justify-content-center " id="container">
+        <div class="card border-dark w-75 shadow-lg p-3 mb-5 bg-body rounded">
+            <div class="card-header d-flex justify-content-center" ><h5>{{ todo.title | safe }}</h5></div>
+            <div class="card-body">
+                <button id="open-button" class="btn btn-outline-primary " type="button" data-bs-toggle="collapse" data-bs-target="#collapseText{{ todo.history_id_todo }}" aria-expanded="true" aria-controls="collapseExample">
+                    Expand
+                </button>
+                <div class="collapse" id="collapseText{{ todo.history_id_todo }}">
+                    <div>{{ todo.todo | safe }}</div>
+                </div>
+            </div>
+            <div class="card-footer text-muted">
+                TODO until {{ todo.month }} / {{ todo.day }} / {{ todo.year }}
+                <div class="btn-group">
+                <form action="/deletetodo" method="POST" id="buttonDelete">
+                    <input name="id" type="hidden" value="{{ todo.history_id_todo }}">
+                    <button type="submit" class="btn btn-outline-primary">Delete</button>
+                </form>
+                <form action="/edittodobutton" method="POST" id="buttonEdit">
+                    <input name="id" type="hidden" value="{{ todo.history_id_todo }}">
+                    <button type="submit" class="btn btn-outline-primary">Edit</button>
+                </form>
+                </div>
             </div>
         </div>
-
-
-            </div>
+    </div>          
     {% endfor %}
-
 {% endblock %}

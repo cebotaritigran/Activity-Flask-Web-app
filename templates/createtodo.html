@@ -5,8 +5,9 @@
 {% endblock %}
 
 {% block main %}
-<h2>Create TODO</h2>
-<div class="card border-dark">
+<h2>New TODO</h2>
+<div class="d-flex justify-content-center" id="container">
+<div class="card border-dark w-75">
 <form method="post" action="/createtodo">
     <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="title" name="title" placeholder="Title" type="text" value="{{ title }}">
     {% if errorNoTitle %}
@@ -30,5 +31,6 @@
     {% endif %}
     <button class="btn btn-primary" type="submit">Save</button>
 </form>
+</div>
 </div>
 {% endblock %}
