@@ -11,7 +11,13 @@
     <div class="d-flex justify-content-center" id="container">
         <div class="card border-dark w-75">
             <div class="card-header d-flex justify-content-center " ><h5>{{ text.title | safe }}</h5></div>
-            <div class="card-body"><div id="texttext">{{ text.text | safe }}</div></p>
+            <div class="card-body">
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseText{{ text.history_id }}" aria-expanded="true" aria-controls="collapseExample">
+                    Open
+                  </button>
+                <div class="collapse" id="collapseText{{ text.history_id }}">
+                    <div>{{ text.text | safe }}</div>
+                </div>
                 <style>
                     #texttext{text-align: left;}
                 </style>
