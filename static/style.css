@@ -200,7 +200,7 @@ svg
 
 .nav-item {
 
-width: 4.1rem;
+width: 4.9rem;
 }
 }
 
@@ -254,3 +254,17 @@ width: 4.1rem;
   font-weight: 500;
 }
 
+#minuteTimer
+{
+  font-size: 60px;
+}
+
+#secondTimer
+{
+  font-size: 60px;
+}
+
+#timer
+{
+  font-size: 30px;
+}
