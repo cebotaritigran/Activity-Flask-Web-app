@@ -12,7 +12,7 @@
 ## TODO
 It is self explanatory you make to-do lists in which ever style you want with rich text editor and you put a date to-do until date so it's not like journal you actually have to put a date in the future. That's why this application is good to track your past, present and future activity.
 
-![TODO Screenshot] (/screenshots/TODO.png?raw=true "TODO")
+![TODO Screenshot](/screenshots/TODO.png?raw=true "Timer")
 
 ## Timer
 **Timer** is used to track whatever activity you are doing. For example, we can put reading in a title and put one hour to the timer and at the end of 1 hour it will add that time to the record with the title and date. But if you stop the timer before one hour it will actually count the time passed, for example 10 minutes.
