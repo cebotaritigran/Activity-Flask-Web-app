@@ -1,18 +1,25 @@
 # **Activity**
 ## **Video Demo**: https://youtu.be/EmWiEikEwQI
-## Description:
 
-### What is Activity?
+## What is Activity?
 **Activity** is a Web application made to track your days, it has 3 usages; **Journal, TODO, Timer**.
 
-#### Journal
+## Journal
 **Journal** is basically like a diary to keep track of your days, you can use it in any way you want, writing your daily progress writing your diary or even to keep some notes. It has a rich text editor as well as a place to input a title, it tracks whatever date it is that you wrote your entry automatically and you can edit it whenever you want as wells as delete your entries.
+
 ![Journal Screenshot](/screenshots/Journal.png?raw=true "Journal")
-#### TODO
+
+## TODO
 It is self explanatory you make to-do lists in which ever style you want with rich text editor and you put a date to-do until date so it's not like journal you actually have to put a date in the future. That's why this application is good to track your past, present and future activity.
 
-#### Timer
+![TODO Screenshot] (/screenshots/TODO.png?raw=true "TODO")
+
+## Timer
 **Timer** is used to track whatever activity you are doing. For example, we can put reading in a title and put one hour to the timer and at the end of 1 hour it will add that time to the record with the title and date. But if you stop the timer before one hour it will actually count the time passed, for example 10 minutes.
+
+![Timer Screenshot](/screenshots/Timer.png?raw=true "Timer")
+
+![Timer Screenshot](/screenshots/Timer2.png?raw=true "Timer")
 
 ### Why Activity?
 Activity came from a problem that I had that I wanted to solve is to track whatever it is I'm doing in a day, I have university to keep track of, my hobbies, learning to code and my other activities, so at some point it got hard to keep track of everything, I had written notes on some text file and it wasn't very organized. So I decided why not make a web app and maybe later a mobile app to track whatever it is I'm doing in a day and in an organized way too. I hope to in time make it a mobile app and make it actually a very usable simple application that would help people orginize their days.
